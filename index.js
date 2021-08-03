@@ -1,8 +1,8 @@
 const TicTacToe = require('./src/tic-tac-toe.js');
 
-window.game = new TicTacToe();
+window.game = new TicTacToe();// обьявляем метод game и присваивает ему TicTacToe 
 
-resetBtn.addEventListener('click', () => {
+resetBtn.addEventListener('click', () => { // кнопка перезагрузки новой игры
     window.game = new TicTacToe();
     render();
 });
@@ -14,7 +14,7 @@ function render() {
         html += '<div class="row">';
 
         for (let j = 0; j < 3; j++) {
-            html += `<div class="column">${game.getFieldValue(i, j) || ''}</div>`;
+            html += `<div class="column">${game.getFieldValue(i, j) || ''}</div>`;//метод возвращает размеры матрицы
         }
 
         html += '</div>';
@@ -26,17 +26,16 @@ function render() {
 render();
 
 gameCanvas.addEventListener('click', e => {
-    if (!e.target.classList.contains('column')) {
-        return;
+    if (!e.target.classList.contains('column')) {//?? на каджый div в блоке gameCanvas повесили прослушку что бы понимать на какой блок ты нажали мышкой
+        return ;
     }
+    const rowIndex = Array.from(gameCanvas.children).indexOf(e.target.parentNode);//получили индекс по ряду ,куда мы нажали 
+    const colIndex = Array.from(e.target.parentNode.children).indexOf(e.target);//получили индекс по столбцу ,куда мы нажали 
 
-    const rowIndex = Array.from(gameCanvas.children).indexOf(e.target.parentNode);
-    const colIndex = Array.from(e.target.parentNode.children).indexOf(e.target);
+    game.nextTurn(rowIndex, colIndex);  // метод класса tic-tac
 
-    game.nextTurn(rowIndex, colIndex);
-
-    const winner = game.getWinner();
-    const isDraw = game.isDraw();
+    const winner = game.getWinner(); // метод класса tic-tac который возвращает символ победителя ( x или o) или null, если победителя еще нет
+    const isDraw = game.isDraw(); // метод класса tic-tac должен вернуть истину, если ходов больше нет и нет победителя
 
     render();
 
